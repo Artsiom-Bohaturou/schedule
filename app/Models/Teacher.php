@@ -10,7 +10,7 @@ class Teacher extends Model
 {
     use HasFactory;
     use Filterable;
-    protected $fillable = ['image', 'full_name'];
+    protected $fillable = ['image', 'full_name', 'department_id', 'position_id'];
 
     public function department()
     {

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('image')->nullable();
             $table->string('full_name')->unique();
-            $table->foreignId('department_id')->constrained('teacher_departments')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('position_id')->constrained('teacher_positions')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('department_id')->nullable()->constrained('teacher_departments')->cascadeOnDelete()->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('position_id')->nullable()->constrained('teacher_positions')->cascadeOnDelete()->cascadeOnUpdate()->nullOnDelete();
             $table->timestamps();
         });
     }

@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             TeacherDepartmentSeeder::class,
             TeacherPositionSeeder::class,
             WeekdaySeeder::class,
+            AdminSeeder::class,
         ]);
     }
 }

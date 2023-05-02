@@ -15,7 +15,9 @@ return new class extends Migration
     {
         Schema::create('group_education_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Высшее, среднее, ...
+            $table->string('abbreviated_name')->nullable();
+            $table->string('full_name'); // Высшее, среднее, ...
+            $table->string('time_type');
         });
     }
 

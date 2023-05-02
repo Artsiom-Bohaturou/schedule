@@ -1,0 +1,13 @@
+body.dark-mode .select2-selection__rendered {
+    background-color: #343a40;
+    color: #fff !important;
+}
+
+body.dark-mode .select2-selection__placeholder {
+    color: hsl(0, 0%, 70%) !important;
+
+}
+
+body.dark-mode .select2-selection__arrow b {
+    border-color: #fff transparent transparent transparent !important;
+}
