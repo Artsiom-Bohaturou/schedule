@@ -27,6 +27,8 @@ class SubjectTypeStoreRequest extends FormRequest
         return [
             'abbreviated_name' => 'required|string',
             'full_name' => 'required|string',
+            'exam' => 'boolean|nullable',
+            'long' => 'boolean|nullable',
         ];
     }
 }

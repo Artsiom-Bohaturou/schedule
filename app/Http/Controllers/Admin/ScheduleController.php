@@ -2,78 +2,69 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\Admin\ScheduleStoreRequest;
+use App\Http\Requests\Admin\ScheduleUpdateRequest;
+use App\Models\Group;
+use App\Models\Schedule;
+use App\Models\Subject;
+use App\Models\SubjectTime;
+use App\Models\SubjectType;
+use App\Models\Teacher;
+use App\Models\Weekday;
 
 class ScheduleController extends BaseController
 {
+
     public function index()
     {
-        return view('admin.schedule.index');
+        $schedule = Schedule::with('group', 'teacher', 'subject', 'subjectType', 'weekday')->get();
+        $time = SubjectTime::all();
+
+        return view('admin.schedule.index', compact('schedule', 'time'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store(ScheduleStoreRequest $request)
     {
-        //
+        $data = $request->validated();
+        Schedule::create($data);
+
+        return redirect()->route('schedule.index');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function update(ScheduleUpdateRequest $request, $id)
     {
-        //
+        $data = $request->validated();
+        // Group::findOrFail($id)->update($data);
+
+        return redirect()->route('group.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        dd('show');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        // Group::destroy($id);
+
+        return redirect()->route('group.index');
+    }
+
+    public function create()
+    {
+        $groups = Group::select(['id', 'name'])->whereDate('date_end', '>', now())->get();
+        $teachers = Teacher::select(['id', 'full_name'])->get();
+        $subjects = Subject::select(['id', 'full_name'])->get();
+        $types = SubjectType::select(['id', 'full_name', 'exam', 'long'])->get();
+        $weekdays = Weekday::all();
+        $times = SubjectTime::all();
+
+        return view('admin.schedule.create', compact('groups', 'teachers', 'subjects', 'types', 'weekdays', 'times'));
+    }
+
+    public function edit()
+    {
+
     }
 }

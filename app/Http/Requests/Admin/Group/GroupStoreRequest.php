@@ -25,7 +25,7 @@ class GroupStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'string|required',
+            'name' => 'string|required|unique:groups,name',
             'education_type_id' => 'exists:group_education_types,id|required|integer',
             'date_start' => 'required|date',
             'date_end' => 'required|date|after:date_start',

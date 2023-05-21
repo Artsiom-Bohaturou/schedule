@@ -36,23 +36,24 @@
                 <td>{{ $row['id'] }}</td>
                 <td>{{ $row['full_name'] }}</td>
                 <td>
-                    {{ $positions[$row['position_id'] - 1]->full_name ? $positions[$row['position_id'] - 1]->full_name : '-' }}
+                    {{ !is_null($row['position_id']) && $positions[$row['position_id'] - 1]->full_name ? $positions[$row['position_id'] - 1]->full_name : '-' }}
                 </td>
                 <td>
-                    {{ $departments[$row['department_id'] - 1]->full_name
+                    {{ !is_null($row['department_id']) && $departments[$row['department_id'] - 1]->full_name
                         ? $departments[$row['department_id'] - 1]->abbreviated_name
                         : '-' }}
                 </td>
                 <td>
                     <nobr>
                         <a href="{{ route('group.show', $row['id']) }}">
-                            <x-adminlte-button id="destroyButton" icon="fa fa-lg fa-fw fa-eye" class="bg-primary" />
+                            <x-adminlte-button icon="fa fa-lg fa-fw fa-eye" class="bg-primary" />
                         </a>
                         <x-adminlte-button data-id="{{ $row['id'] }}" data-full="{{ $row['full_name'] }}"
                             data-department_id="{{ $row['department_id'] }}" data-position_id="{{ $row['position_id'] }}"
-                            data-department="{{ $departments[$row['department_id'] - 1]->full_name }}"
-                            data-position="{{ $positions[$row['position_id'] - 1]->full_name }}" id="editButton"
-                            icon="fa fa-lg fa-fw fa-pen" data-toggle="modal" data-target="#modalEdit" class="bg-warning" />
+                            data-department="{{ !is_null($row['department_id']) && $departments[$row['department_id'] - 1]->full_name }}"
+                            data-position="{{ !is_null($row['position_id']) && $positions[$row['position_id'] - 1]->full_name }}"
+                            id="editButton" icon="fa fa-lg fa-fw fa-pen" data-toggle="modal" data-target="#modalEdit"
+                            class="bg-warning" />
                         <x-adminlte-button data-id="{{ $row['id'] }}" id="destroyButton" icon="fa fa-lg fa-fw fa-trash"
                             data-toggle="modal" data-target="#modalDelete" class="bg-danger" />
                     </nobr>

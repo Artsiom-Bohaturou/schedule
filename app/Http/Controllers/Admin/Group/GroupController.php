@@ -11,7 +11,7 @@ use App\Models\GroupEducationType;
 class GroupController extends BaseController
 {
 
-    public function index(\Illuminate\Http\Request $request)
+    public function index()
     {
         $groups = Group::getGroups();
         $educationTypes = GroupEducationType::all();

@@ -27,11 +27,11 @@
         {{-- login field --}}
         <div class="input-group mb-3">
             <input name="login" class="form-control @error('login') is-invalid @enderror" value="{{ old('login') }}"
-                placeholder="{{ __('adminlte::adminlte.email') }}" autofocus>
+                placeholder="{{ __('adminlte::adminlte.login') }}" autofocus>
 
             <div class="input-group-append">
                 <div class="input-group-text">
-                    <span class="fas fa-envelope {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                    <span class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
                 </div>
             </div>
 

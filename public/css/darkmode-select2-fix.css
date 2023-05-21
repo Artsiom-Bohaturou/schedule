@@ -11,3 +11,7 @@ body.dark-mode .select2-selection__placeholder {
 body.dark-mode .select2-selection__arrow b {
     border-color: #fff transparent transparent transparent !important;
 }
+
+body.dark-mode .select2-container--bootstrap4 .select2-selection {
+    background-color: #343a40 !important;
+}

@@ -27,8 +27,9 @@
                 <td>
                     <nobr>
                         <x-adminlte-button data-id="{{ $row['id'] }}" data-full="{{ $row['full_name'] }}"
-                            data-abbreviated="{{ $row['abbreviated_name'] }}" id="editButton" icon="fa fa-lg fa-fw fa-pen"
-                            data-toggle="modal" data-target="#modalEdit" class="bg-warning" />
+                            data-abbreviated="{{ $row['abbreviated_name'] }}" data-exam="{{ $row['exam'] }}"
+                            data-long="{{ $row['long'] }}" id="editButton" icon="fa fa-lg fa-fw fa-pen" data-toggle="modal"
+                            data-target="#modalEdit" class="bg-warning" />
                         <x-adminlte-button data-id="{{ $row['id'] }}" id="destroyButton" icon="fa fa-lg fa-fw fa-trash"
                             data-toggle="modal" data-target="#modalDelete" class="bg-danger" />
                     </nobr>
@@ -48,6 +49,11 @@
             <x-adminlte-input name="abbreviated_name" id="abbreviatedInput" />
             <label>{{ trans('admin.subject_type_full') }}</label>
             <x-adminlte-input name="full_name" id="fullInput" />
+            <label for="examCheckbox">{{ trans('admin.subject_type_modal_checkbox_exam') }}</label>
+            <input id="examCheckbox" class="custom-checkbox" type="checkbox" name="exam" value="1">
+            <br>
+            <label for="longCheckbox">{{ trans('admin.subject_type_modal_checkbox_long') }}</label>
+            <input id="longCheckbox" class="custom-checkbox" type="checkbox" name="long" value="1">
 
             <x-slot name="footerSlot">
                 <div class="mr-auto"></div>
@@ -81,6 +87,11 @@
             <x-adminlte-input name="abbreviated_name" id="abbreviatedInput" />
             <label>{{ trans('admin.subject_type_full') }}</label>
             <x-adminlte-input name="full_name" id="fullInput" />
+            <label for="examCheckboxCreate">{{ trans('admin.subject_type_modal_checkbox_exam') }}</label>
+            <input id="examCheckboxCreate" class="custom-checkbox" type="checkbox" name="exam" value="1">
+            <br>
+            <label for="longCheckboxCreate">{{ trans('admin.subject_type_modal_checkbox_long') }}</label>
+            <input id="longCheckboxCreate" class="custom-checkbox" type="checkbox" name="long" value="1">
 
             <x-slot name="footerSlot">
                 <div class="mr-auto"></div>
@@ -110,9 +121,42 @@
                 document.querySelector('#abbreviatedInput').value = e.target.closest('#editButton').dataset
                     .abbreviated;
                 document.querySelector('#fullInput').value = e.target.closest('#editButton').dataset.full;
+                document.querySelector('#examCheckbox').checked = !!(+e.target.closest('#editButton').dataset.exam);
+                document.querySelector('#longCheckbox').checked = !!(+e.target.closest('#editButton').dataset.long);
+
             }
 
             e.target.closest('#destroyButton') && (deleteId = e.target.closest('#destroyButton').dataset.id);
         });
+
+        document.querySelector('#examCheckbox').addEventListener('change', (e) => {
+            if (e.currentTarget.checked) {
+                document.querySelector('#longCheckbox').checked = false;
+                document.querySelector('#longCheckbox').disabled = true;
+            } else {
+                document.querySelector('#longCheckbox').disabled = false;
+            }
+        });
+
+        document.querySelector('#examCheckboxCreate').addEventListener('change', (e) => {
+            if (e.currentTarget.checked) {
+                document.querySelector('#longCheckboxCreate').checked = false;
+                document.querySelector('#longCheckboxCreate').disabled = true;
+            } else {
+                document.querySelector('#longCheckboxCreate').disabled = false;
+            }
+        });
     </script>
+@stop
+
+@section('css')
+    <style>
+        .custom-checkbox {
+            position: relative;
+            left: 5px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+        }
+    </style>
 @stop

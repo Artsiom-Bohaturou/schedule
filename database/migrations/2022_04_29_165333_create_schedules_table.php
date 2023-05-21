@@ -19,8 +19,8 @@ return new class extends Migration
             $table->foreignId('teacher_id')->constrained('teachers')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('subject_id')->constrained('subjects')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('subject_type_id')->constrained('subject_types')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->smallInteger('week_number');
-            $table->foreignId('weekday_id')->constrained('weekdays')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->smallInteger('week_number')->nullable();
+            $table->foreignId('weekday_id')->nullable()->constrained('weekdays');
             $table->string('building');
             $table->integer('auditory');
             $table->integer('subgroup')->nullable();

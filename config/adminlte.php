@@ -14,8 +14,8 @@ return [
     |
      */
 
-    'title' => 'AdminLTE 3',
-    'title_prefix' => '',
+    'title' => 'Расписание занятий',
+    'title_prefix' => 'БГАС |',
     'title_postfix' => '',
 
     /*
@@ -63,9 +63,9 @@ return [
     |
      */
 
-    'logo' => 'Расписание',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-    'logo_img_class' => 'brand-image img-circle elevation-3',
+    'logo' => 'Расписание занятий',
+    'logo_img' => 'images/logo-bgas-300x300-removebg-preview.png',
+    'logo_img_class' => 'brand-image elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
     'logo_img_alt' => 'Admin Logo',
@@ -86,7 +86,7 @@ return [
     'auth_logo' => [
         'enabled' => false,
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            'path' => 'images/logo-bgas-300x300-removebg-preview.png',
             'alt' => 'Auth Logo',
             'class' => '',
             'width' => 50,
@@ -109,9 +109,9 @@ return [
     'preloader' => [
         'enabled' => true,
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            'path' => 'images/logo-bgas-300x300-removebg-preview.png',
             'alt' => 'AdminLTE Preloader Image',
-            'effect' => 'animation__shake',
+            'effect' => 'animation_wobble',
             'width' => 60,
             'height' => 60,
         ],

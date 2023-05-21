@@ -31,7 +31,7 @@ Auth::routes([
 ]);
 
 Route::prefix('admin')->middleware('auth:web')->group(function () {
-    Route::resource('', ScheduleController::class)->names('schedule');
+    Route::resource('', ScheduleController::class)->names('schedule')->parameter('', 'id')->whereNumber('id');
 
     Route::prefix('subject')->as('subject.')->group(function () {
         Route::resource('/', SubjectController::class)->except(['create', 'edit', 'show'])->parameter('', 'id');
