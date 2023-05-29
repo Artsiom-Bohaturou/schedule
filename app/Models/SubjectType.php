@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubjectType extends Model
 {
-    protected $fillable = ['abbreviated_name', 'full_name', 'exam', 'long'];
+    protected $fillable = ['abbreviated_name', 'full_name', 'exam'];
     public $timestamps = false;
 }

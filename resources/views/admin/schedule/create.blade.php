@@ -42,7 +42,7 @@
                 <option selected disabled></option>
                 @foreach ($types as $type)
                     <option @if ($type->exam) href="#exam" @else href="#subject" @endif
-                        value="{{ $type->id }}" data-long="{{ $type->long }}">{{ $type->full_name }}</option>
+                        value="{{ $type->id }}">{{ $type->full_name }}</option>
                 @endforeach
             </x-adminlte-select2>
 
@@ -65,20 +65,23 @@
     <script>
         let long = 0;
 
-        $('#typeSelect').on('change', function() {
-            $('.tab-content .tab-pane').removeClass('show active');
-            $($(this).find('option:selected').attr('href')).addClass('show active');
-            long = +this.options[this.selectedIndex].dataset.long;
+        $('#longCheckbox').change(function() {
+            if (this.checked) {
+                long = 1;
+            }
 
-            if (long == 1) {
-                $('#subgroupSection').attr('hidden', false);
-            } else {
-                $('#subgroupSection').attr('hidden', true);
+            if (!this.checked) {
+                long = 0;
             }
         });
 
+        $('#typeSelect').on('change', function() {
+            $('.tab-content .tab-pane').removeClass('show active');
+            $($(this).find('option:selected').attr('href')).addClass('show active');
+        });
+
         $('#timeStartSelect').on('change', function() {
-            var value = (+$(this).find('option:selected').val() + long).toString();
+            let value = (+$(this).find('option:selected').val() + long).toString();
             $('#timeEndSelect').select2('val', value);
         });
 
@@ -116,6 +119,14 @@
             width: 10px;
             height: 2px;
             background-color: #fff;
+        }
+
+        .long-checkbox {
+            width: 20px;
+            height: 20px;
+            position: relative;
+            top: 6px;
+            left: 5px;
         }
     </style>
 @stop

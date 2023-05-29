@@ -1,19 +1,29 @@
 <div class="tab-pane fade" id="subject" role="tabpanel" aria-labelledby="subject-tab">
+    <div>
+        <label for="longCheckbox">{{ trans('admin.schedule_create_checkbox_long') }}</label>
+        <input class="long-checkbox" id="longCheckbox" value="1" name="long" type="checkbox">
+    </div>
     <label>{{ trans('admin.schedule_create_week_number_input') }}</label>
-    <x-adminlte-select2 name="week_number">
-        <option selected value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-    </x-adminlte-select2>
+    <div>
+        @for ($i = 1; $i <= 4; $i++)
+            <span class="mr-2 d-inline-flex align-items-center">
+                <input style="width: 16px;height: 16px;" id="weekNumberCheckbox{{ $i }}"
+                    value="{{ $i }}" name="week_numbers[]" type="checkbox">
+                <label class="mt-2 ml-1" for="weekNumberCheckbox{{ $i }}">{{ $i }}</label>
+            </span>
+        @endfor
+    </div>
 
     <label>{{ trans('admin.schedule_create_week_number_input') }}</label>
-    <x-adminlte-select2 name="weekday_id">
-        <option selected disabled></option>
+    <div>
         @foreach ($weekdays as $weekday)
-            <option value="{{ $weekday->id }}">{{ $weekday->name }}</option>
+            <span class="mr-2 d-inline-flex align-items-center">
+                <input style="width: 16px;height: 16px;" id="weekdayCheckbox{{ $weekday->id }}"
+                    value="{{ $weekday->id }}" name="weekdays[]" type="checkbox">
+                <label class="mt-2 ml-1" for="weekdayCheckbox{{ $weekday->id }}">{{ $weekday->name }}</label>
+            </span>
         @endforeach
-    </x-adminlte-select2>
+    </div>
 
     <div id="subgroupSection">
         <label>{{ trans('admin.schedule_create_subgroup_input') }}</label>

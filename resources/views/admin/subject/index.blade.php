@@ -7,13 +7,25 @@
         
         $config = [
             'order' => [[0, 'asc']],
-            'paging' => false,
-            'searching' => false,
             'bInfo' => false,
+            'language' => [
+                'sProcessing' => trans('admin.datatable_processing'),
+                'sZeroRecords' => trans('admin.datatable_zero_records'),
+                'sEmptyTable' => trans('admin.datatable_empty'),
+                'sSearch' => trans('admin.datatable_search'),
+                'sLoadingRecords' => trans('admin.datatable_loading'),
+                'sLengthMenu' => trans('admin.datatable_length'),
+                'oPaginate' => [
+                    'sFirst' => trans('admin.datatable_first'),
+                    'sLast' => trans('admin.datatable_last'),
+                    'sNext' => trans('admin.datatable_next'),
+                    'sPrevious' => trans('admin.datatable_previous'),
+                ],
+            ],
         ];
         
     @endphp
-    <div class="d-flex justify-content-end pt-4">
+    <div class="d-flex justify-content-end pt-4 mb-4">
         <x-adminlte-button id="createButton" icon="fa fa-lg fa-fw fa-plus" data-toggle="modal" data-target="#modalCreate"
             class="bg-success" label="{{ trans('admin.create') }}" />
     </div>

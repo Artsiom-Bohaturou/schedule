@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Admin\Subject;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class SubjectTypeUpdateRequest extends FormRequest
+class ScheduleImportRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +25,7 @@ class SubjectTypeUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'abbreviated_name' => 'required|string',
-            'full_name' => 'required|string',
-            'exam' => 'boolean|nullable',
+            'file' => 'required|file|mimes:xlsx',
         ];
     }
 }

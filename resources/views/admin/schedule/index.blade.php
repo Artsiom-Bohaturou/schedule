@@ -2,7 +2,9 @@
 
 @section('content')
 
-    <div class="d-flex justify-content-end pt-4 pb-2">
+    <div class="d-flex justify-content-between pt-4 pb-2">
+        <x-adminlte-button icon="fa fa-lg fa-fw fa-upload" data-toggle="modal" data-target="#modalImport" class="bg-primary"
+            label="{{ trans('admin.schedule_import') }}" />
         <a href="{{ route('schedule.create') }}">
             <x-adminlte-button id="createButton" icon="fa fa-lg fa-fw fa-plus" class="bg-success"
                 label="{{ trans('admin.create') }}" />
@@ -53,7 +55,7 @@
                         <tr>
                             <td>{{ $row->group->name }}</td>
                             <td>{{ $row->teacher->full_name }}</td>
-                            <td>{{ $row->subject->abbreviated_name }}</td>
+                            <td>{{ $row->subject->full_name }}</td>
                             <td>{{ $row->subjectType->abbreviated_name }}</td>
                             <td>{{ $row->week_number }}</td>
                             <td>{{ $row->weekday->name }}</td>
@@ -63,10 +65,9 @@
                             <td>
                                 <nobr>
                                     @php
-                                        $endTime = $row->subject_time_id != $time->count() ? $time[$row->subject_time_id]->time_end : '...';
-                                        $fullTime = $row->subjectType->long != 1 ? $time[$row->subject_time_id - 1]->time_start . ' - ' . $time[$row->subject_time_id - 1]->time_end : $time[$row->subject_time_id - 1]->time_start . ' - ' . $endTime;
+                                        $fullTime = $time[$row->subject_time_id - 1]->time_start . ' - ' . $time[$row->subject_time_id - 1]->time_end;
                                     @endphp
-                                    {{ $fullTime }}
+                                    {{ $row->subject_time_id }} ({{ $fullTime }})
                                 </nobr>
                             </td>
                             <td>
@@ -132,6 +133,38 @@
         </div>
     </div>
 
+    {{-- IMPORT FORM --}}
+    <form method="POST" action="{{ route('schedule.import') }}" enctype="multipart/form-data">
+        <x-adminlte-modal id="modalImport" title="{{ trans('admin.subject_modal_edit_title') }}" theme="primary"
+            icon="fas fa-upload" size='lg'>
+            @csrf
+
+            <label>{{ trans('admin.schedule_import_label') }}</label>
+            <x-adminlte-input type="file" name="file" />
+
+            <x-slot name="footerSlot">
+                <div class="mr-auto"></div>
+                <button id="importSubmit" class="btn btn-primary" type="submit" data-toggle="modal"
+                    data-target="#modalLoader">
+                    {{ trans('admin.schedule_import_submit') }}
+                </button>
+                <x-adminlte-button id="importHide" theme="secondary" label="{{ trans('admin.cancel') }}"
+                    data-dismiss="modal" />
+            </x-slot>
+        </x-adminlte-modal>
+    </form>
+
+    {{-- Loader --}}
+    <x-adminlte-modal id="modalLoader">
+        <div class="d-flex align-items-center">
+            <div class="spinner-border text-primary mr-3" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+
+            {{ trans('admin.schedule_import_loader') }}
+        </div>
+    </x-adminlte-modal>
+
 @stop
 
 @section('css')
@@ -144,5 +177,20 @@
             color: inherit;
             filter: brightness(80%);
         }
+
+        #modalLoader .modal-header {
+            display: none;
+        }
+
+        #modalLoader .modal-footer {
+            display: none;
+        }
     </style>
+@stop
+
+@section('js')
+    <script>
+        document.querySelector('#importSubmit').addEventListener('click', () => document.querySelector('#importHide')
+            .click());
+    </script>
 @stop
