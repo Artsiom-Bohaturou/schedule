@@ -13,6 +13,7 @@ use App\Models\SubjectTime;
 use App\Models\SubjectType;
 use App\Models\Teacher;
 use App\Models\Weekday;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -21,7 +22,11 @@ class ScheduleController extends BaseController
 
     public function index()
     {
-        $schedule = Schedule::with('group', 'teacher', 'subject', 'subjectType', 'weekday')->get();
+        $schedule = Schedule::select(DB::raw('ANY_VALUE(id) as id,subject_id, subject_type_id,weekday_id,subject_time_id,group_id,teacher_id,building,auditory,subgroup,date, GROUP_CONCAT(week_number SEPARATOR ",") AS week_numbers'))
+            ->groupBy('group_id', 'subject_id', 'subject_type_id', 'weekday_id', 'subject_time_id', 'teacher_id', 'building', 'auditory', 'subgroup', 'date', 'date_end', 'date_start')
+            ->with('group', 'teacher', 'subject', 'subjectType', 'weekday')
+            ->get();
+
         $time = SubjectTime::all();
 
         return view('admin.schedule.index', compact('schedule', 'time'));
