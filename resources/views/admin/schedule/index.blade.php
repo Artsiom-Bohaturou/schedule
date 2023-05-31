@@ -51,7 +51,9 @@
                                 <td class="text-center align-middle">{{ $row->subject->full_name }}</td>
                                 <td class="text-center align-middle">{{ $row->subjectType->abbreviated_name }}</td>
                                 <td class="text-center align-middle">{{ $row->week_numbers }}</td>
-                                <td class="text-center align-middle">{{ $row->weekday->name }}</td>
+                                <td class="text-center align-middle"><span
+                                        hidden>{{ $row->weekday->id }}</span>{{ $row->weekday->name }}
+                                </td>
                                 <td class="text-center align-middle">{{ $row->building }}</td>
                                 <td class="text-center align-middle">{{ $row->auditory }}</td>
                                 <td class="text-center align-middle">{{ $row->subgroup ? $row->subgroup : '-' }}</td>
@@ -208,7 +210,9 @@
                     targets: groupColumn
                 }],
                 order: [
-                    [0, 'asc']
+                    [0, 'asc'],
+                    [5, 'asc'],
+                    [9, 'asc']
                 ],
                 bInfo: false,
                 pageLength: 25,
