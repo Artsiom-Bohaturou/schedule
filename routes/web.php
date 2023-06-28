@@ -31,7 +31,9 @@ Auth::routes([
 ]);
 
 Route::prefix('admin')->middleware('auth:web')->group(function () {
-    Route::resource('', ScheduleController::class)->names('schedule')->parameter('', 'id')->whereNumber('id');
+    Route::resource('', ScheduleController::class)->names('schedule')->parameter('', 'id')->whereNumber('id')->except(['destroy', 'update']);
+    Route::delete('/destroy', [ScheduleController::class, 'destroy'])->name('schedule.destroy');
+    Route::delete('/update', [ScheduleController::class, 'update'])->name('schedule.update');
     Route::post('/import', [ScheduleController::class, 'import'])->name('schedule.import');
 
     Route::prefix('subject')->as('subject.')->group(function () {

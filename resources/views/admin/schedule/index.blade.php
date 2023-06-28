@@ -81,7 +81,7 @@
         </div>
         <div class="tab-pane fade pt-4" id="exam" role="tabpanel" aria-labelledby="examTab">
             @php
-                $heads = [trans('admin.group_name'), trans('admin.schedule_teacher'), trans('admin.subject_full'), trans('admin.schedule_type'), trans('admin.schedule_building'), trans('admin.schedule_auditory'), trans('admin.schedule_time'), ['label' => trans('admin.actions'), 'no-export' => true, 'width' => 5]];
+                $heads = [trans('admin.group_name'), trans('admin.schedule_teacher'), trans('admin.subject_full'), trans('admin.schedule_type'), trans('admin.schedule_building'), trans('admin.schedule_auditory'), trans('admin.schedule_date'), ['label' => trans('admin.actions'), 'no-export' => true, 'width' => 5]];
                 
                 $config = [
                     'order' => [[0, 'asc']],
@@ -131,12 +131,12 @@
 
     {{-- IMPORT FORM --}}
     <form method="POST" action="{{ route('schedule.import') }}" enctype="multipart/form-data">
-        <x-adminlte-modal id="modalImport" title="{{ trans('admin.subject_modal_edit_title') }}" theme="primary"
+        <x-adminlte-modal id="modalImport" title="{{ trans('admin.schedule_import_title') }}" theme="primary"
             icon="fas fa-upload" size='lg'>
             @csrf
 
-            <label>{{ trans('admin.schedule_import_label') }}</label>
-            <x-adminlte-input type="file" name="file" />
+            <x-adminlte-input style="height:90%;" type="file" name="file"
+                label="{{ trans('admin.schedule_import_label') }}" />
 
             <x-slot name="footerSlot">
                 <div class="mr-auto"></div>
@@ -160,6 +160,19 @@
             {{ trans('admin.schedule_import_loader') }}
         </div>
     </x-adminlte-modal>
+
+    @if ($errors->any())
+        @foreach ($errors as $error)
+            <x-adminlte-alert class="bg-danger fixed-bottom w-25 mx-auto" icon="fa fa-lg fa-times"
+                title="{{ trans('admin.schedule_alert_error_title') }}" dismissable>
+                {{ $error->get() }}
+            </x-adminlte-alert>
+        @endforeach
+    @endif
+
+    @if (session('success'))
+        <x-adminlte-alert class="bg-success fixed-bottom w-25 mx-auto" icon="fa fa-lg fa-check" dismissable />
+    @endif
 
 @stop
 
@@ -192,6 +205,7 @@
             top: 50px;
             width: 100%;
             background-color: #212529 !important;
+            color: white;
         }
     </style>
 @stop

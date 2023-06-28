@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\ScheduleDestroyRequest;
 use App\Http\Requests\Admin\ScheduleImportRequest;
 use App\Http\Requests\Admin\ScheduleStoreRequest;
 use App\Http\Requests\Admin\ScheduleUpdateRequest;
@@ -19,7 +20,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ScheduleController extends BaseController
 {
-
     public function index()
     {
         $schedule = Schedule::select(DB::raw('ANY_VALUE(id) as id,subject_id, subject_type_id,weekday_id,subject_time_id,group_id,teacher_id,building,auditory,subgroup,date, GROUP_CONCAT(week_number SEPARATOR ",") AS week_numbers'))
@@ -35,7 +35,17 @@ class ScheduleController extends BaseController
     public function store(ScheduleStoreRequest $request)
     {
         $data = $request->validated();
+
+        if (!array_key_exists('weekdays', $data)) {
+            Schedule::insert($data);
+
+            return redirect()
+                ->route('schedule.index')
+                ->with('success', true);
+        }
+
         $schedule = [];
+
         foreach ($data['weekdays'] as $day) {
             foreach ($data['week_numbers'] as $week) {
                 $subject = $data;
@@ -68,14 +78,25 @@ class ScheduleController extends BaseController
 
     public function show($id)
     {
-        dd('show');
+        $subject = Schedule::findOrFail($id);
+        $subjects = Schedule::whereGroupId($subject->group_id)
+            ->whereTeacherId($subject->teacher_id)
+            ->whereSubjectId($subject->subject_id)
+            ->whereSubjectTypeId($subject->subject_type_id)
+            ->whereWeekdayId($subject->weekday_id)
+            ->whereSubjectTimeId($subject->subject_time_id)
+            ->with('group', 'teacher', 'subject', 'subjectType', 'weekday')
+            ->get();
+
+        return view('admin.schedule.show', compact('subjects'));
     }
 
-    public function destroy($id)
+    public function destroy(ScheduleDestroyRequest $request)
     {
-        // Group::destroy($id);
+        $ids = $request->validated()['id'];
+        Schedule::whereIn('id', $ids)->delete();
 
-        return redirect()->route('group.index');
+        return redirect()->route('schedule.index');
     }
 
     public function create()
@@ -90,9 +111,24 @@ class ScheduleController extends BaseController
         return view('admin.schedule.create', compact('groups', 'teachers', 'subjects', 'types', 'weekdays', 'times'));
     }
 
-    public function edit()
+    public function edit($id)
     {
+        $subject = Schedule::find($id);
+        $groups = Group::select(['id', 'name'])->whereDate('date_end', '>', now())->get();
+        $teachers = Teacher::select(['id', 'full_name'])->get();
+        $subjects = Subject::select(['id', 'full_name'])->get();
+        $types = SubjectType::select(['id', 'full_name', 'exam'])->get();
+        $weekdays = Weekday::all();
+        $times = SubjectTime::all();
+        $default = Schedule::whereGroupId($subject->group_id)
+            ->whereTeacherId($subject->teacher_id)
+            ->whereSubjectId($subject->subject_id)
+            ->whereSubjectTypeId($subject->subject_type_id)
+            ->whereWeekdayId($subject->weekday_id)
+            ->whereSubjectTimeId($subject->subject_time_id)
+            ->get();
 
+        return view('admin.schedule.edit', compact('groups', 'teachers', 'subjects', 'types', 'weekdays', 'times', 'default'));
     }
 
     public function import(ScheduleImportRequest $request)
@@ -108,6 +144,7 @@ class ScheduleController extends BaseController
             if (Storage::exists($file->hashName())) {
                 Storage::delete($file->hashName());
             }
+
             return redirect()->route('schedule.index')->withErrors(['error' => $e->getMessage()]);
         }
     }
