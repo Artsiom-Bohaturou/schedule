@@ -31,9 +31,8 @@ Auth::routes([
 ]);
 
 Route::prefix('admin')->middleware('auth:web')->group(function () {
-    Route::resource('', ScheduleController::class)->names('schedule')->parameter('', 'id')->whereNumber('id')->except(['destroy', 'update']);
+    Route::resource('', ScheduleController::class)->names('schedule')->parameter('', 'id')->whereNumber('id')->except(['destroy']);
     Route::delete('/destroy', [ScheduleController::class, 'destroy'])->name('schedule.destroy');
-    Route::delete('/update', [ScheduleController::class, 'update'])->name('schedule.update');
     Route::post('/import', [ScheduleController::class, 'import'])->name('schedule.import');
 
     Route::prefix('subject')->as('subject.')->group(function () {
@@ -43,14 +42,14 @@ Route::prefix('admin')->middleware('auth:web')->group(function () {
     });
 
     Route::prefix('teacher')->as('teacher.')->group(function () {
-        Route::resource('/', TeacherController::class)->except(['create', 'edit'])->parameter('', 'id')->whereNumber('id');
+        Route::resource('/', TeacherController::class)->except(['create', 'edit', 'show'])->parameter('', 'id')->whereNumber('id');
         Route::resource('/positions', TeacherPositionController::class)->names('position')->except(['create', 'edit', 'show']);
         Route::resource('/departments', TeacherDepartmentController::class)->names('department')->except(['create', 'edit', 'show']);
 
     });
 
     Route::prefix('group')->as('group.')->group(function () {
-        Route::resource('/', GroupController::class)->except(['create', 'edit'])->parameter('', 'id')->whereNumber('id');
+        Route::resource('/', GroupController::class)->except(['create', 'edit', 'show'])->parameter('', 'id')->whereNumber('id');
         Route::resource('/education', GroupEducationTypeController::class)->names('education')->except(['create', 'edit', 'show']);
 
     });

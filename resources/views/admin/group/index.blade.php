@@ -45,9 +45,6 @@
                     <td>{{ $row['date_end'] }}</td>
                     <td>
                         <nobr>
-                            <a href="{{ route('group.show', $row['id']) }}">
-                                <x-adminlte-button icon="fa fa-lg fa-fw fa-eye" class="bg-primary" />
-                            </a>
                             <x-adminlte-button data-id="{{ $row['id'] }}" data-name="{{ $row['name'] }}"
                                 data-start="{{ $row['date_start'] }}" data-end="{{ $row['date_end'] }}"
                                 data-type_name="{{ $educationTypes[$row['education_type_id'] - 1]->full_name . ' (' . $educationTypes[$row['education_type_id'] - 1]->time_type . ')' }}"

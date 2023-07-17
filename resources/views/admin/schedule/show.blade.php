@@ -15,16 +15,14 @@
                     <td class="align-middle">{{ trans('admin.group_name') }}</td>
 
                     <td>
-                        <a class="custom-link"
-                            href="{{ route('group.show', $subjects[0]->group_id) }}">{{ $subjects[0]->group->name }}</a>
+                        {{ $subjects[0]->group->name }}
                     </td>
                 </tr>
 
                 <tr>
                     <td class="align-middle">{{ trans('admin.schedule_teacher') }}</td>
                     <td class="align-middle">
-                        <a class="custom-link"
-                            href="{{ route('teacher.show', $subjects[0]->teacher_id) }}">{{ $subjects[0]->teacher->full_name }}</a>
+                        {{ $subjects[0]->teacher->full_name }}
                     </td>
                 </tr>
                 <tr>
@@ -115,12 +113,3 @@
         </x-adminlte-modal>
     </form>
 @endsection
-
-@section('css')
-    <style>
-        .custom-link {
-            color: inherit;
-            text-decoration: underline;
-        }
-    </style>
-@stop

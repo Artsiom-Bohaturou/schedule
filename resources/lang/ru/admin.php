@@ -118,6 +118,7 @@ return [
     'schedule_create_exam_date_input' => 'Выберите дату',
     'schedule_create_week_number_input' => 'Выберите недели',
     'schedule_create_weekday_input' => 'Выберите дни недели',
+    'schedule_create_weekday_input_single' => 'Выберите день недели',
     'schedule_create_subgroup_input' => 'Выберите подгруппу',
     'schedule_create_time_start_input' => 'Выберите время начала занятия',
     'schedule_create_time_end_input' => 'Время конца занятия',
@@ -127,4 +128,5 @@ return [
     'schedule_show_delete_title' => 'Удаление занятия из расписания',
     'schedule_show_delete_message' => 'Вы уверены что хотите удалить это занятие из расписания?',
     'schedule_show_edit_title' => 'Изменение занятия',
+    'schedule_edit_page_title' => 'Изменение предмета',
 ];

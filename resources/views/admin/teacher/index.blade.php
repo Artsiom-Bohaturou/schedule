@@ -45,9 +45,6 @@
                 </td>
                 <td>
                     <nobr>
-                        <a href="{{ route('group.show', $row['id']) }}">
-                            <x-adminlte-button icon="fa fa-lg fa-fw fa-eye" class="bg-primary" />
-                        </a>
                         <x-adminlte-button data-id="{{ $row['id'] }}" data-full="{{ $row['full_name'] }}"
                             data-department_id="{{ $row['department_id'] }}" data-position_id="{{ $row['position_id'] }}"
                             data-department="{{ !is_null($row['department_id']) && $departments[$row['department_id'] - 1]->full_name }}"

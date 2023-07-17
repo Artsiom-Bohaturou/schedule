@@ -22,7 +22,7 @@ class ScheduleController extends BaseController
 {
     public function index()
     {
-        $schedule = Schedule::select(DB::raw('ANY_VALUE(id) as id,subject_id, subject_type_id,weekday_id,subject_time_id,group_id,teacher_id,building,auditory,subgroup,date, GROUP_CONCAT(week_number SEPARATOR ",") AS week_numbers'))
+        $schedule = Schedule::select(DB::raw('ANY_VALUE(id) as id,subject_id, subject_type_id,weekday_id,subject_time_id,group_id,teacher_id,building,auditory,subgroup,date, GROUP_CONCAT(DISTINCT week_number ORDER BY week_number ASC SEPARATOR ",") AS week_numbers'))
             ->groupBy('group_id', 'subject_id', 'subject_type_id', 'weekday_id', 'subject_time_id', 'teacher_id', 'building', 'auditory', 'subgroup', 'date', 'date_end', 'date_start')
             ->with('group', 'teacher', 'subject', 'subjectType', 'weekday')
             ->get();
@@ -71,9 +71,38 @@ class ScheduleController extends BaseController
     public function update(ScheduleUpdateRequest $request, $id)
     {
         $data = $request->validated();
-        // Group::findOrFail($id)->update($data);
 
-        return redirect()->route('group.index');
+        if (array_key_exists('date', $data)) {
+            Schedule::findOrFail($id)->update($data);
+
+            return redirect()->route('schedule.index');
+        }
+
+        $schedule = Schedule::whereIn('id', $data['ids'])->get();
+        $exists = [];
+
+        foreach ($schedule as $v) {
+            if (!in_array($v->week_number, $data['week_numbers'])) {
+                $v->delete();
+                continue;
+            }
+
+            $exists[] = $v->week_number;
+        }
+
+        foreach ($data['week_numbers'] as $v) {
+            if (!in_array($v, $exists)) {
+                $new = new Schedule($data);
+                $new->week_number = $v;
+                $new->save();
+                $schedule->add($new);
+            }
+        }
+
+        unset($data['week_numbers'], $data['ids']);
+        $schedule->toQuery()->update($data);
+
+        return redirect()->route('schedule.index')->with('success', true);
     }
 
     public function show($id)
@@ -85,6 +114,7 @@ class ScheduleController extends BaseController
             ->whereSubjectTypeId($subject->subject_type_id)
             ->whereWeekdayId($subject->weekday_id)
             ->whereSubjectTimeId($subject->subject_time_id)
+            ->whereSubgroup($subject->subgroup)
             ->with('group', 'teacher', 'subject', 'subjectType', 'weekday')
             ->get();
 
@@ -113,7 +143,7 @@ class ScheduleController extends BaseController
 
     public function edit($id)
     {
-        $subject = Schedule::find($id);
+        $subject = Schedule::findOrFail($id);
         $groups = Group::select(['id', 'name'])->whereDate('date_end', '>', now())->get();
         $teachers = Teacher::select(['id', 'full_name'])->get();
         $subjects = Subject::select(['id', 'full_name'])->get();
@@ -126,6 +156,7 @@ class ScheduleController extends BaseController
             ->whereSubjectTypeId($subject->subject_type_id)
             ->whereWeekdayId($subject->weekday_id)
             ->whereSubjectTimeId($subject->subject_time_id)
+            ->whereSubgroup($subject->subgroup)
             ->get();
 
         return view('admin.schedule.edit', compact('groups', 'teachers', 'subjects', 'types', 'weekdays', 'times', 'default'));
@@ -139,7 +170,7 @@ class ScheduleController extends BaseController
             Excel::import(new ScheduleImport, Storage::path($file->hashName()));
             Storage::delete($file->hashName());
 
-            return redirect()->route('schedule.index')->with('success', 'success');
+            return redirect()->route('schedule.index')->with('success', true);
         } catch (\Exception $e) {
             if (Storage::exists($file->hashName())) {
                 Storage::delete($file->hashName());
