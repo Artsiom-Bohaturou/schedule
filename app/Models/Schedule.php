@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Schedule extends Model
 {
     use HasFactory;
-    use Filterable;
+
     protected $fillable = ['week_number', 'building', 'auditory', 'subgroup', 'date', 'date_start', 'date_end', 'group_id', 'teacher_id', 'subject_id', 'subject_type_id', 'weekday_id', 'subject_time_id'];
 
     public function group()

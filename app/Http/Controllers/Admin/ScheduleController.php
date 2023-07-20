@@ -14,7 +14,6 @@ use App\Models\SubjectTime;
 use App\Models\SubjectType;
 use App\Models\Teacher;
 use App\Models\Weekday;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -22,9 +21,7 @@ class ScheduleController extends BaseController
 {
     public function index()
     {
-        $schedule = Schedule::select(DB::raw('ANY_VALUE(id) as id,subject_id, subject_type_id,weekday_id,subject_time_id,group_id,teacher_id,building,auditory,subgroup,date, GROUP_CONCAT(DISTINCT week_number ORDER BY week_number ASC SEPARATOR ",") AS week_numbers'))
-            ->groupBy('group_id', 'subject_id', 'subject_type_id', 'weekday_id', 'subject_time_id', 'teacher_id', 'building', 'auditory', 'subgroup', 'date', 'date_end', 'date_start')
-            ->with('group', 'teacher', 'subject', 'subjectType', 'weekday')
+        $schedule = $this->getScheduleBuilder()
             ->get();
 
         $time = SubjectTime::all();
@@ -51,9 +48,7 @@ class ScheduleController extends BaseController
                 $subject = $data;
                 $subject['weekday_id'] = $day;
                 $subject['week_number'] = $week;
-                unset($subject['week_numbers']);
-                unset($subject['weekdays']);
-                unset($subject['long']);
+                unset($subject['week_numbers'], $subject['weekdays'], $subject['long']);
                 $schedule[] = $subject;
 
                 if (!is_null($data['long'])) {
