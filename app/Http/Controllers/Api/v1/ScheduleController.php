@@ -8,6 +8,7 @@ use App\Http\Resources\ScheduleGroupCollection;
 use App\Http\Resources\ScheduleTeacherCollection;
 use App\Models\Group;
 use App\Models\Teacher;
+use Illuminate\Http\Response;
 
 class ScheduleController extends BaseController
 {
@@ -16,7 +17,9 @@ class ScheduleController extends BaseController
 
     public function group(ScheduleGroupRequest $request)
     {
-        $group = Group::whereName($request->group)->first();
+        $group = Group::whereName($request->group)->firstOr(function () {
+            abort(Response::HTTP_NOT_FOUND, "Group doesn't exists");
+        });
         $schedule = $this->getScheduleBuilder($request)
             ->whereGroupId($group->id)
             ->get();
@@ -26,7 +29,9 @@ class ScheduleController extends BaseController
 
     public function teacher(ScheduleTeacherRequest $request)
     {
-        $teacher = Teacher::where('full_name', 'like', "%$request->teacher%")->first();
+        $teacher = Teacher::where('full_name', 'like', "%$request->teacher%")->firstOr(function () {
+            abort(Response::HTTP_NOT_FOUND, "Teacher doesn't exists");
+        });
         $schedule = $this->getScheduleBuilder($request)
             ->whereTeacherId($teacher->id)
             ->get();
