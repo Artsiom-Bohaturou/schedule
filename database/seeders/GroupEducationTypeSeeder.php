@@ -14,22 +14,34 @@ class GroupEducationTypeSeeder extends Seeder
     {
         GroupEducationType::insert([
             [
-                'name' => 'ВО(заочное)',
+                'full_name' => 'Высшее образование',
+                'abbreviated_name' => 'ВО',
+                'time_type' => 'Заочное',
             ],
             [
-                'name' => 'ВО(дневное)',
+                'full_name' => 'Высшее образование',
+                'abbreviated_name' => 'ВО',
+                'time_type' => 'Дневное',
             ],
             [
-                'name' => 'Магистратура(заочное)',
+                'full_name' => 'Магистратура',
+                'abbreviated_name' => '',
+                'time_type' => 'Заочное',
             ],
             [
-                'name' => 'Магистратура(дневное)',
+                'full_name' => 'Магистратура',
+                'abbreviated_name' => '',
+                'time_type' => 'Дневное',
             ],
             [
-                'name' => 'ССО(заочное)',
+                'full_name' => 'Среднее специальное образование',
+                'abbreviated_name' => 'ССО',
+                'time_type' => 'Заочное',
             ],
             [
-                'name' => 'ССО(дневное)',
+                'full_name' => 'Среднее специальное образование',
+                'abbreviated_name' => 'ССО',
+                'time_type' => 'Дневное',
             ],
         ]);
     }
