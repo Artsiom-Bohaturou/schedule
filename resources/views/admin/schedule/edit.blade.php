@@ -36,7 +36,7 @@
             </x-adminlte-select2>
 
             <label>{{ trans('admin.schedule_create_building_input') }}</label>
-            <x-adminlte-input type="number" name="building" value="{{ $default[0]->building }}" />
+            <x-adminlte-input type="text" name="building" value="{{ $default[0]->building }}" />
 
             <label>{{ trans('admin.schedule_create_auditory_input') }}</label>
             <x-adminlte-input type="number" name="auditory" value="{{ $default[0]->auditory }}" />

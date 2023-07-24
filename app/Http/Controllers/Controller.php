@@ -15,7 +15,7 @@ class Controller extends BaseController
 
     protected function getScheduleBuilder()
     {
-        return Schedule::select(DB::raw('ANY_VALUE(id) as id,subject_id, subject_type_id,weekday_id,subject_time_id,group_id,teacher_id,building,auditory,subgroup,date, GROUP_CONCAT(DISTINCT week_number ORDER BY week_number ASC SEPARATOR ", ") AS week_numbers'))
+        return Schedule::select(DB::raw('ANY_VALUE(id) as id,subject_id, subject_type_id,weekday_id,subject_time_id,group_id,teacher_id,building,auditory,subgroup,date,date_start,date_end, GROUP_CONCAT(DISTINCT week_number ORDER BY week_number ASC SEPARATOR ", ") AS week_numbers'))
             ->groupBy('group_id', 'subject_id', 'subject_type_id', 'weekday_id', 'subject_time_id', 'teacher_id', 'building', 'auditory', 'subgroup', 'date', 'date_end', 'date_start')
             ->with('group', 'teacher', 'subject', 'subjectType', 'weekday');
     }

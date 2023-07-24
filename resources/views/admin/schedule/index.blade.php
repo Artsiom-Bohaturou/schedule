@@ -48,7 +48,13 @@
                             <tr>
                                 <td class="text-center align-middle">{{ $row->group->name }}</td>
                                 <td class="text-center align-middle">{{ $row->teacher->full_name }}</td>
-                                <td class="text-center align-middle">{{ $row->subject->full_name }}</td>
+                                <td class="text-center align-middle">{{ $row->subject->full_name }}
+                                    @if ($row->date_end < now()->format('Y-m-d'))
+                                        <br>({{ trans('admin.schedule_ended') }})
+                                    @elseif ($row->date_start > now()->format('Y-m-d'))
+                                        <br>({{ trans('admin.schedule_not_started') }})
+                                    @endif
+                                </td>
                                 <td class="text-center align-middle">{{ $row->subjectType->abbreviated_name }}</td>
                                 <td class="text-center align-middle">{{ $row->week_numbers }}</td>
                                 <td class="text-center align-middle"><span

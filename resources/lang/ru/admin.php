@@ -129,4 +129,6 @@ return [
     'schedule_show_delete_message' => 'Вы уверены что хотите удалить это занятие из расписания?',
     'schedule_show_edit_title' => 'Изменение занятия',
     'schedule_edit_page_title' => 'Изменение предмета',
+    'schedule_ended' => 'Закончилось',
+    'schedule_not_started' => 'Не началось',
 ];

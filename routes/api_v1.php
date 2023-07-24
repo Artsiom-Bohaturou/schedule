@@ -20,3 +20,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('schedule/group', [ScheduleController::class, 'group']);
 Route::get('schedule/teacher', [ScheduleController::class, 'teacher']);
+Route::get('schedule/exams', [ScheduleController::class, 'exams']);

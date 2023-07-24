@@ -34,7 +34,7 @@ class ScheduleController extends BaseController
         $data = $request->validated();
 
         if (!array_key_exists('weekdays', $data)) {
-            Schedule::insert($data);
+            Schedule::create($data);
 
             return redirect()
                 ->route('schedule.index')
@@ -48,6 +48,8 @@ class ScheduleController extends BaseController
                 $subject = $data;
                 $subject['weekday_id'] = $day;
                 $subject['week_number'] = $week;
+                $subject['created_at'] = now();
+                $subject['updated_at'] = now();
                 unset($subject['week_numbers'], $subject['weekdays'], $subject['long']);
                 $schedule[] = $subject;
 

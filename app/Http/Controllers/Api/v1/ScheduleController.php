@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Http\Requests\Api\ScheduleExamRequest;
 use App\Http\Requests\Api\ScheduleGroupRequest;
 use App\Http\Requests\Api\ScheduleTeacherRequest;
+use App\Http\Resources\ExamResource;
 use App\Http\Resources\ScheduleGroupCollection;
 use App\Http\Resources\ScheduleTeacherCollection;
 use App\Models\Group;
+use App\Models\Schedule;
 use App\Models\Teacher;
 use Illuminate\Http\Response;
 
 class ScheduleController extends BaseController
 {
-    // Добавить отправку экзаменов
     // Swagger
 
     public function group(ScheduleGroupRequest $request)
@@ -37,6 +39,22 @@ class ScheduleController extends BaseController
             ->get();
 
         return (new ScheduleTeacherCollection($schedule))->setTeacher($teacher);
+    }
+
+    public function exams(ScheduleExamRequest $request)
+    {
+        $builder = Schedule::whereRelation('subjectType', 'exam', '=', true)
+            ->with('group', 'teacher', 'subject', 'subjectType');
+
+        if ($request->teacher) {
+            $schedule = $builder->whereRelation('teacher', 'full_name', 'like', "%$request->teacher%")->get();
+
+            return ExamResource::collection($schedule);
+        }
+
+        $schedule = $builder->whereRelation('group', 'name', 'like', "%$request->group%")->get();
+
+        return ExamResource::collection($schedule);
     }
 
 }

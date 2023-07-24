@@ -17,7 +17,7 @@ class BaseController extends Controller
             })
             ->when($request->weeks, function ($q) use ($request) {
                 $q->whereIn('week_number', $request->weeks);
-            });
+            })->where('date_end', '>', now());
     }
 
 }
