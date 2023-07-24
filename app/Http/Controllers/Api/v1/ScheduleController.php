@@ -15,8 +15,6 @@ use Illuminate\Http\Response;
 
 class ScheduleController extends BaseController
 {
-    // Swagger
-
     public function group(ScheduleGroupRequest $request)
     {
         $group = Group::whereName($request->group)->firstOr(function () {

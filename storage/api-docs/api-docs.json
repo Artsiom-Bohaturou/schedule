@@ -1,0 +1,751 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Schedule API Documentation",
+        "description": "АПИ предоставляет доступ к расписанию занятий, экзаменов и их сортировке",
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/schedule": {
+            "description": "Расписание"
+        },
+        "/api/v1/schedule/group": {
+            "get": {
+                "tags": [
+                    "Расписание"
+                ],
+                "summary": "Получить расписание для группы",
+                "parameters": [
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "application/json"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "application/json"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "group",
+                        "in": "query",
+                        "description": "Номер группы",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "ИП291"
+                        }
+                    },
+                    {
+                        "name": "subgroup",
+                        "in": "query",
+                        "description": "Номер подгруппы",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "Тип занятия",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "ЛР"
+                        }
+                    },
+                    {
+                        "name": "weeks[]",
+                        "in": "query",
+                        "description": "Номера недель, для которых нужно получить расписание",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer",
+                                "enum": [
+                                    1,
+                                    2,
+                                    3,
+                                    4
+                                ],
+                                "example": [
+                                    1,
+                                    2,
+                                    3
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "weekdays[]",
+                        "in": "query",
+                        "description": "Номера дней недели, для которых нужно получить расписание",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer",
+                                "enum": [
+                                    1,
+                                    2,
+                                    3,
+                                    4,
+                                    5,
+                                    6,
+                                    7
+                                ],
+                                "example": [
+                                    1,
+                                    2,
+                                    3
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "schedule": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 141
+                                                            },
+                                                            "subject": {
+                                                                "properties": {
+                                                                    "abbreviated": {
+                                                                        "type": "string",
+                                                                        "example": "ООП"
+                                                                    },
+                                                                    "full": {
+                                                                        "type": "string",
+                                                                        "example": "Объектно-ориентированнное программирование"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "type": {
+                                                                "properties": {
+                                                                    "abbreviated": {
+                                                                        "type": "string",
+                                                                        "example": "ЛР"
+                                                                    },
+                                                                    "full": {
+                                                                        "type": "string",
+                                                                        "example": "Лабораторная работа"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "auditory": {
+                                                                "type": "integer",
+                                                                "example": 202
+                                                            },
+                                                            "building": {
+                                                                "type": "string",
+                                                                "example": "ул. Франциска Скорины 8"
+                                                            },
+                                                            "weeks": {
+                                                                "type": "string",
+                                                                "example": "1, 3"
+                                                            },
+                                                            "subgroup": {
+                                                                "type": "integer",
+                                                                "example": 2
+                                                            },
+                                                            "time": {
+                                                                "properties": {
+                                                                    "number": {
+                                                                        "type": "integer",
+                                                                        "example": 5
+                                                                    },
+                                                                    "start": {
+                                                                        "type": "string",
+                                                                        "example": "16:20"
+                                                                    },
+                                                                    "end": {
+                                                                        "type": "string",
+                                                                        "example": "18:00"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "weekday": {
+                                                                "properties": {
+                                                                    "number": {
+                                                                        "type": "integer",
+                                                                        "example": 1
+                                                                    },
+                                                                    "name": {
+                                                                        "type": "string",
+                                                                        "example": "Понедельник"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "teacher": {
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "type": "integer",
+                                                                        "example": 2
+                                                                    },
+                                                                    "fullName": {
+                                                                        "type": "string",
+                                                                        "example": "Петров В. В."
+                                                                    },
+                                                                    "department": {
+                                                                        "type": "string",
+                                                                        "example": null
+                                                                    },
+                                                                    "position": {
+                                                                        "type": "string",
+                                                                        "example": null
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "group": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 9
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "ИП291"
+                                                        },
+                                                        "type": {
+                                                            "properties": {
+                                                                "names": {
+                                                                    "properties": {
+                                                                        "abbreviated": {
+                                                                            "type": "string",
+                                                                            "example": "ВО"
+                                                                        },
+                                                                        "full": {
+                                                                            "type": "string",
+                                                                            "example": "Высшее образование"
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                },
+                                                                "timeType": {
+                                                                    "type": "string",
+                                                                    "example": "Заочное"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Запрошенная группа не найдена"
+                    }
+                }
+            }
+        },
+        "/api/v1/schedule/teacher": {
+            "get": {
+                "tags": [
+                    "Расписание"
+                ],
+                "summary": "Получить расписание для преодователя",
+                "parameters": [
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "application/json"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "application/json"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "teacher",
+                        "in": "query",
+                        "description": "фио учителя",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Игнатьева"
+                        }
+                    },
+                    {
+                        "name": "subgroup",
+                        "in": "query",
+                        "description": "Номер подгруппы",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "Тип занятия",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "ПЗ"
+                        }
+                    },
+                    {
+                        "name": "weeks[]",
+                        "in": "query",
+                        "description": "Номера недель, для которых нужно получить расписание",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer",
+                                "enum": [
+                                    1,
+                                    2,
+                                    3,
+                                    4
+                                ],
+                                "example": [
+                                    1,
+                                    2,
+                                    3
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "weekdays[]",
+                        "in": "query",
+                        "description": "Номера дней недели, для которых нужно получить расписание",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer",
+                                "enum": [
+                                    1,
+                                    2,
+                                    3,
+                                    4,
+                                    5,
+                                    6,
+                                    7
+                                ],
+                                "example": [
+                                    1,
+                                    2,
+                                    3
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "schedule": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 141
+                                                            },
+                                                            "subject": {
+                                                                "properties": {
+                                                                    "abbreviated": {
+                                                                        "type": "string",
+                                                                        "example": "ООП"
+                                                                    },
+                                                                    "full": {
+                                                                        "type": "string",
+                                                                        "example": "Объектно-ориентированнное программирование"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "type": {
+                                                                "properties": {
+                                                                    "abbreviated": {
+                                                                        "type": "string",
+                                                                        "example": "ЛР"
+                                                                    },
+                                                                    "full": {
+                                                                        "type": "string",
+                                                                        "example": "Лабораторная работа"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "auditory": {
+                                                                "type": "integer",
+                                                                "example": 202
+                                                            },
+                                                            "building": {
+                                                                "type": "string",
+                                                                "example": "ул. Франциска Скорины 8"
+                                                            },
+                                                            "weeks": {
+                                                                "type": "string",
+                                                                "example": "1, 3"
+                                                            },
+                                                            "subgroup": {
+                                                                "type": "integer",
+                                                                "example": 2
+                                                            },
+                                                            "time": {
+                                                                "properties": {
+                                                                    "number": {
+                                                                        "type": "integer",
+                                                                        "example": 5
+                                                                    },
+                                                                    "start": {
+                                                                        "type": "string",
+                                                                        "example": "16:20"
+                                                                    },
+                                                                    "end": {
+                                                                        "type": "string",
+                                                                        "example": "18:00"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "weekday": {
+                                                                "properties": {
+                                                                    "number": {
+                                                                        "type": "integer",
+                                                                        "example": 1
+                                                                    },
+                                                                    "name": {
+                                                                        "type": "string",
+                                                                        "example": "Понедельник"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "group": {
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "type": "integer",
+                                                                        "example": 9
+                                                                    },
+                                                                    "name": {
+                                                                        "type": "string",
+                                                                        "example": "ИП291"
+                                                                    },
+                                                                    "type": {
+                                                                        "properties": {
+                                                                            "names": {
+                                                                                "properties": {
+                                                                                    "abbreviated": {
+                                                                                        "type": "string",
+                                                                                        "example": "ВО"
+                                                                                    },
+                                                                                    "full": {
+                                                                                        "type": "string",
+                                                                                        "example": "Высшее образование"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "timeType": {
+                                                                                "type": "string",
+                                                                                "example": "Заочное"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "teacher": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 2
+                                                        },
+                                                        "fullName": {
+                                                            "type": "string",
+                                                            "example": "Петров В. В."
+                                                        },
+                                                        "department": {
+                                                            "type": "string",
+                                                            "example": null
+                                                        },
+                                                        "position": {
+                                                            "type": "string",
+                                                            "example": null
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Запрошенный преподователь не найден"
+                    }
+                }
+            }
+        },
+        "/api/v1/schedule/exams": {
+            "get": {
+                "tags": [
+                    "Расписание"
+                ],
+                "summary": "Получить расписание экзаменов",
+                "description": "Возращает расписание экзамнов по фио преподователя или номеру группы",
+                "parameters": [
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "application/json"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "application/json"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "group",
+                        "in": "query",
+                        "description": "Номер группы",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "teacher",
+                        "in": "query",
+                        "description": "Фио преподователя",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/ExamResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ExamResource": {
+                "properties": {
+                    "id": {
+                        "description": "Exam ID",
+                        "type": "integer"
+                    },
+                    "subject": {
+                        "description": "Subject information",
+                        "properties": {
+                            "abbreviated": {
+                                "description": "Subject abbreviated name",
+                                "type": "string"
+                            },
+                            "full": {
+                                "description": "Subject full name",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "type": {
+                        "description": "Type of exam",
+                        "properties": {
+                            "abbreviated": {
+                                "description": "Type abbreviated name",
+                                "type": "string"
+                            },
+                            "full": {
+                                "description": "Type full name",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "auditory": {
+                        "description": "Auditory number",
+                        "type": "integer"
+                    },
+                    "building": {
+                        "description": "Building number",
+                        "type": "string"
+                    },
+                    "teacher": {
+                        "description": "Teacher information",
+                        "properties": {
+                            "id": {
+                                "description": "Teacher ID",
+                                "type": "integer"
+                            },
+                            "fullName": {
+                                "description": "Teacher full name",
+                                "type": "string"
+                            },
+                            "department": {
+                                "description": "Teacher department",
+                                "type": "string"
+                            },
+                            "position": {
+                                "description": "Teacher position",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "group": {
+                        "description": "Group information",
+                        "properties": {
+                            "id": {
+                                "description": "Group ID",
+                                "type": "integer"
+                            },
+                            "name": {
+                                "description": "Group name",
+                                "type": "string"
+                            },
+                            "type": {
+                                "description": "Group type",
+                                "properties": {
+                                    "names": {
+                                        "description": "Group type names",
+                                        "properties": {
+                                            "abbreviated": {
+                                                "description": "Group type abbreviated name",
+                                                "type": "string"
+                                            },
+                                            "full": {
+                                                "description": "Group type full name",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "timeType": {
+                                        "description": "Group time type",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "date": {
+                        "description": "Exam date and time",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}
