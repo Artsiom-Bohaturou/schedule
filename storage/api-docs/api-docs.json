@@ -237,39 +237,7 @@
                                                     }
                                                 },
                                                 "group": {
-                                                    "properties": {
-                                                        "id": {
-                                                            "type": "integer",
-                                                            "example": 9
-                                                        },
-                                                        "name": {
-                                                            "type": "string",
-                                                            "example": "ИП291"
-                                                        },
-                                                        "type": {
-                                                            "properties": {
-                                                                "names": {
-                                                                    "properties": {
-                                                                        "abbreviated": {
-                                                                            "type": "string",
-                                                                            "example": "ВО"
-                                                                        },
-                                                                        "full": {
-                                                                            "type": "string",
-                                                                            "example": "Высшее образование"
-                                                                        }
-                                                                    },
-                                                                    "type": "object"
-                                                                },
-                                                                "timeType": {
-                                                                    "type": "string",
-                                                                    "example": "Заочное"
-                                                                }
-                                                            },
-                                                            "type": "object"
-                                                        }
-                                                    },
-                                                    "type": "object"
+                                                    "$ref": "#/components/schemas/GroupResource"
                                                 }
                                             },
                                             "type": "object"
@@ -485,39 +453,7 @@
                                                                 "type": "object"
                                                             },
                                                             "group": {
-                                                                "properties": {
-                                                                    "id": {
-                                                                        "type": "integer",
-                                                                        "example": 9
-                                                                    },
-                                                                    "name": {
-                                                                        "type": "string",
-                                                                        "example": "ИП291"
-                                                                    },
-                                                                    "type": {
-                                                                        "properties": {
-                                                                            "names": {
-                                                                                "properties": {
-                                                                                    "abbreviated": {
-                                                                                        "type": "string",
-                                                                                        "example": "ВО"
-                                                                                    },
-                                                                                    "full": {
-                                                                                        "type": "string",
-                                                                                        "example": "Высшее образование"
-                                                                                    }
-                                                                                },
-                                                                                "type": "object"
-                                                                            },
-                                                                            "timeType": {
-                                                                                "type": "string",
-                                                                                "example": "Заочное"
-                                                                            }
-                                                                        },
-                                                                        "type": "object"
-                                                                    }
-                                                                },
-                                                                "type": "object"
+                                                                "$ref": "#/components/schemas/GroupResource"
                                                             }
                                                         },
                                                         "type": "object"
@@ -632,6 +568,70 @@
                     }
                 }
             }
+        },
+        "/api/v1/schedule/group/list": {
+            "get": {
+                "tags": [
+                    "Расписание"
+                ],
+                "summary": "Получить список групп",
+                "description": "Возращает список всех групп с пагинацией. 15 по умолчанию.",
+                "operationId": "getGroupList",
+                "parameters": [
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "application/json"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "application/json"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "The page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of results per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedGroupResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -701,47 +701,126 @@
                         "type": "object"
                     },
                     "group": {
-                        "description": "Group information",
-                        "properties": {
-                            "id": {
-                                "description": "Group ID",
-                                "type": "integer"
-                            },
-                            "name": {
-                                "description": "Group name",
-                                "type": "string"
-                            },
-                            "type": {
-                                "description": "Group type",
-                                "properties": {
-                                    "names": {
-                                        "description": "Group type names",
-                                        "properties": {
-                                            "abbreviated": {
-                                                "description": "Group type abbreviated name",
-                                                "type": "string"
-                                            },
-                                            "full": {
-                                                "description": "Group type full name",
-                                                "type": "string"
-                                            }
-                                        },
-                                        "type": "object"
-                                    },
-                                    "timeType": {
-                                        "description": "Group time type",
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "type": "object"
+                        "$ref": "#/components/schemas/GroupResource"
                     },
                     "date": {
                         "description": "Exam date and time",
                         "type": "string",
                         "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedGroupResource": {
+                "description": "Paginated list of groups",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/GroupResource"
+                        }
+                    },
+                    "links": {
+                        "properties": {
+                            "first": {
+                                "type": "string"
+                            },
+                            "last": {
+                                "type": "string"
+                            },
+                            "prev": {
+                                "type": "string",
+                                "nullable": true
+                            },
+                            "next": {
+                                "type": "string",
+                                "nullable": true
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "meta": {
+                        "properties": {
+                            "current_page": {
+                                "type": "integer"
+                            },
+                            "from": {
+                                "type": "integer"
+                            },
+                            "last_page": {
+                                "type": "integer"
+                            },
+                            "links": {
+                                "type": "array",
+                                "items": {
+                                    "properties": {
+                                        "url": {
+                                            "type": "string",
+                                            "nullable": true
+                                        },
+                                        "label": {
+                                            "type": "string"
+                                        },
+                                        "active": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "path": {
+                                "type": "string"
+                            },
+                            "per_page": {
+                                "type": "integer"
+                            },
+                            "to": {
+                                "type": "integer"
+                            },
+                            "total": {
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "GroupResource": {
+                "description": "Group model resource",
+                "properties": {
+                    "id": {
+                        "description": "The group ID",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "The name of the group",
+                        "type": "string",
+                        "example": "СП091"
+                    },
+                    "type": {
+                        "description": "The group's type details",
+                        "properties": {
+                            "names": {
+                                "properties": {
+                                    "abbreviated": {
+                                        "type": "string",
+                                        "example": "ВО"
+                                    },
+                                    "full": {
+                                        "type": "string",
+                                        "example": "Высшее образование"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "timeType": {
+                                "description": "The time type of the group",
+                                "type": "string",
+                                "example": "Дневное"
+                            }
+                        },
+                        "type": "object"
                     }
                 },
                 "type": "object"

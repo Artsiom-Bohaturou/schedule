@@ -6,11 +6,13 @@ use App\Http\Requests\Api\ScheduleExamRequest;
 use App\Http\Requests\Api\ScheduleGroupRequest;
 use App\Http\Requests\Api\ScheduleTeacherRequest;
 use App\Http\Resources\ExamResource;
+use App\Http\Resources\GroupResource;
 use App\Http\Resources\ScheduleGroupCollection;
 use App\Http\Resources\ScheduleTeacherCollection;
 use App\Models\Group;
 use App\Models\Schedule;
 use App\Models\Teacher;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class ScheduleController extends BaseController
@@ -53,6 +55,16 @@ class ScheduleController extends BaseController
         $schedule = $builder->whereRelation('group', 'name', 'like', "%$request->group%")->get();
 
         return ExamResource::collection($schedule);
+    }
+
+    public function groupList(Request $request)
+    {
+        $groups = Group::with('educationType')
+            ->where('date_start', '<', now())
+            ->where('date_end', '>', now())
+            ->paginate($request->per_page);
+
+        return GroupResource::collection($groups);
     }
 
 }

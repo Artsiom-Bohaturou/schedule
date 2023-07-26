@@ -19,5 +19,6 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('schedule/group', [ScheduleController::class, 'group']);
+Route::get('schedule/group/list', [ScheduleController::class, 'groupList']);
 Route::get('schedule/teacher', [ScheduleController::class, 'teacher']);
 Route::get('schedule/exams', [ScheduleController::class, 'exams']);

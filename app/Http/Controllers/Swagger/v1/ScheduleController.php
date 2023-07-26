@@ -119,15 +119,7 @@ namespace App\Http\Controllers\Swagger\v1;
  *                     )
  *                 ),
  *                 @OA\Property(property="group", type="object",
- *                     @OA\Property(property="id", type="integer", example=9),
- *                     @OA\Property(property="name", type="string", example="ИП291"),
- *                     @OA\Property(property="type", type="object",
- *                         @OA\Property(property="names", type="object",
- *                             @OA\Property(property="abbreviated", type="string", example="ВО"),
- *                             @OA\Property(property="full", type="string", example="Высшее образование")
- *                         ),
- *                         @OA\Property(property="timeType", type="string", example="Заочное")
- *                     )
+ *                     ref="#/components/schemas/GroupResource"
  *                 )
  *             )
  *         )
@@ -232,15 +224,7 @@ namespace App\Http\Controllers\Swagger\v1;
  *                             @OA\Property(property="name", type="string", example="Понедельник")
  *                         ),
  *                         @OA\Property(property="group", type="object",
- *                             @OA\Property(property="id", type="integer", example=9),
- *                             @OA\Property(property="name", type="string", example="ИП291"),
- *                             @OA\Property(property="type", type="object",
- *                                 @OA\Property(property="names", type="object",
- *                                     @OA\Property(property="abbreviated", type="string", example="ВО"),
- *                                     @OA\Property(property="full", type="string", example="Высшее образование")
- *                                 ),
- *                                 @OA\Property(property="timeType", type="string", example="Заочное")
- *                             )
+ *                             ref="#/components/schemas/GroupResource"
  *                         )
  *                     )
  *                 ),
@@ -309,6 +293,45 @@ namespace App\Http\Controllers\Swagger\v1;
  *         response=422,
  *         description="Unprocessable Entity",
  *     ),
+ * )
+ *
+ * @OA\Get(
+ *     path="/api/v1/schedule/group/list",
+ *     tags={"Расписание"},
+ *     summary="Получить список групп",
+ *     description="Возращает список всех групп с пагинацией. 15 по умолчанию.",
+ *     operationId="getGroupList",
+ *     @OA\Parameter(
+ *         name="Content-Type",
+ *         in="header",
+ *         required=true,
+ *         @OA\Schema(type="string", enum={"application/json"})
+ *     ),
+ *     @OA\Parameter(
+ *         name="Accept",
+ *         in="header",
+ *         required=true,
+ *         @OA\Schema(type="string", enum={"application/json"})
+ *     ),
+ *     @OA\Parameter(
+ *         name="page",
+ *         in="query",
+ *         description="The page number",
+ *         required=false,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Parameter(
+ *         name="per_page",
+ *         in="query",
+ *         description="Number of results per page",
+ *         required=false,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Successful operation",
+ *         @OA\JsonContent(ref="#/components/schemas/PaginatedGroupResource")
+ *     )
  * )
  *
  * @OA\Schema(
@@ -387,40 +410,7 @@ namespace App\Http\Controllers\Swagger\v1;
  *         property="group",
  *         type="object",
  *         description="Group information",
- *         @OA\Property(
- *             property="id",
- *             type="integer",
- *             description="Group ID",
- *         ),
- *         @OA\Property(
- *             property="name",
- *             type="string",
- *             description="Group name",
- *         ),
- *         @OA\Property(
- *             property="type",
- *             type="object",
- *             description="Group type",
- *             @OA\Property(
- *                 property="names",
- *                 type="object",
- *                 description="Group type names",
- *                 @OA\Property(
- *                     property="abbreviated",
- *                     type="string",
- *                     description="Group type abbreviated name",
- *                 ),
- *                 @OA\Property(
- *                     property="full",
- *                     type="string",
- *                     description="Group type full name",
- *                 ),
- *             ),
- *             @OA\Property(
- *                 property="timeType",
- *                 type="string",
- *                 description="Group time type",
- *             ),
+ *         ref="#/components/schemas/GroupResource"
  *         ),
  *     ),
  *     @OA\Property(
@@ -429,6 +419,79 @@ namespace App\Http\Controllers\Swagger\v1;
  *         format="date-time",
  *         description="Exam date and time",
  *     ),
+ * )
+ *
+ * @OA\Schema(
+ *     schema="PaginatedGroupResource",
+ *     description="Paginated list of groups",
+ *     type="object",
+ *     @OA\Property(
+ *         property="data",
+ *         type="array",
+ *         @OA\Items(ref="#/components/schemas/GroupResource")
+ *     ),
+ *     @OA\Property(
+ *         property="links",
+ *         type="object",
+ *         @OA\Property(property="first", type="string"),
+ *         @OA\Property(property="last", type="string"),
+ *         @OA\Property(property="prev", type="string", nullable=true),
+ *         @OA\Property(property="next", type="string", nullable=true),
+ *     ),
+ *     @OA\Property(
+ *         property="meta",
+ *         type="object",
+ *         @OA\Property(property="current_page", type="integer"),
+ *         @OA\Property(property="from", type="integer"),
+ *         @OA\Property(property="last_page", type="integer"),
+ *         @OA\Property(
+ *             property="links",
+ *             type="array",
+ *             @OA\Items(
+ *                 type="object",
+ *                 @OA\Property(property="url", type="string", nullable=true),
+ *                 @OA\Property(property="label", type="string"),
+ *                 @OA\Property(property="active", type="boolean")
+ *             )
+ *         ),
+ *         @OA\Property(property="path", type="string"),
+ *         @OA\Property(property="per_page", type="integer"),
+ *         @OA\Property(property="to", type="integer"),
+ *         @OA\Property(property="total", type="integer")
+ *     )
+ * )
+ *
+ * @OA\Schema(
+ *     schema="GroupResource",
+ *     description="Group model resource",
+ *     @OA\Property(
+ *         property="id",
+ *         type="integer",
+ *         description="The group ID"
+ *     ),
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
+ *         description="The name of the group",
+ *         example="СП091"
+ *     ),
+ *     @OA\Property(
+ *         property="type",
+ *         description="The group's type details",
+ *         type="object",
+ *         @OA\Property(
+ *             property="names",
+ *             type="object",
+ *             @OA\Property(property="abbreviated", type="string",example="ВО"),
+ *             @OA\Property(property="full", type="string",example="Высшее образование"),
+ *         ),
+ *         @OA\Property(
+ *             property="timeType",
+ *             type="string",
+ *             description="The time type of the group",
+ *             example="Дневное"
+ *         )
+ *     )
  * )
  */
 

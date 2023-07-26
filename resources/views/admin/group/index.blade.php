@@ -42,7 +42,7 @@
                             : $educationTypes[$row['education_type_id'] - 1]->full_name }}
                     </td>
                     <td>{{ $row['date_start'] }}</td>
-                    <td>{{ $row['date_end'] }}</td>
+                    <td @if ($row['date_end'] < now()) style="color:red;" @endif>{{ $row['date_end'] }}</td>
                     <td>
                         <nobr>
                             <x-adminlte-button data-id="{{ $row['id'] }}" data-name="{{ $row['name'] }}"
