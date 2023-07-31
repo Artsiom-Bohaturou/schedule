@@ -34,6 +34,7 @@ Route::prefix('admin')->middleware('auth:web')->group(function () {
     Route::resource('', ScheduleController::class)->names('schedule')->parameter('', 'id')->whereNumber('id')->except(['destroy']);
     Route::delete('/destroy', [ScheduleController::class, 'destroy'])->name('schedule.destroy');
     Route::post('/import', [ScheduleController::class, 'import'])->name('schedule.import');
+    Route::delete('/destroy/ended', [ScheduleController::class, 'deleteEnded'])->name('schedule.deleteEnded');
 
     Route::prefix('subject')->as('subject.')->group(function () {
         Route::resource('/', SubjectController::class)->except(['create', 'edit', 'show'])->parameter('', 'id');

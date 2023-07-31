@@ -179,23 +179,6 @@
 
 @section('js')
     <script>
-        let long = 0;
-
-        $('#longCheckbox').change(function() {
-            if (this.checked) {
-                long = 1;
-            }
-
-            if (!this.checked) {
-                long = 0;
-            }
-        });
-
-        $('#timeStartSelect').on('change', function() {
-            let value = (+$(this).find('option:selected').val() + long).toString();
-            $('#timeEndSelect').select2('val', value);
-        });
-
         $('input[name="date"]').on('apply.daterangepicker', function(ev, picker) {
             $(this).val(picker.startDate.format('DD.MM.YYYY HH:mm'));
         });

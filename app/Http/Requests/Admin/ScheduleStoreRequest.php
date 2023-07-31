@@ -29,7 +29,7 @@ class ScheduleStoreRequest extends FormRequest
             'teacher_id' => 'exists:teachers,id|required',
             'subject_id' => 'exists:subjects,id|required',
             'subject_type_id' => 'exists:subject_types,id|required',
-            'building' => 'integer|required',
+            'building' => 'required',
             'auditory' => 'integer|required',
 
             'subject_time_id' => 'exists:subject_times,id|required_without:date',

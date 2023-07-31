@@ -131,4 +131,9 @@ return [
     'schedule_edit_page_title' => 'Изменение предмета',
     'schedule_ended' => 'Закончилось',
     'schedule_not_started' => 'Не началось',
+    'schedule_delete_ended' => 'Удалить все закончившиеся предметы?',
+    'schedule_delete_message' => 'Вы уверены что хотите удалить все закончившиеся предметы из расписания?',
+    'schedule_delete_title' => 'Удаление закончившихся предметов из расписания',
+    'success_message' => 'Успешно',
+    'schedule_file_example' => 'Пример расписания',
 ];

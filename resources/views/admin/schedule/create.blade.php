@@ -4,6 +4,7 @@
 
     <div class="mt-3 ml-2 mb-4">
         <h2>{{ trans('admin.schedule_create_page_title') }}</h2>
+
         <form method="POST" action="{{ route('schedule.store') }}">
             @csrf
 
@@ -11,7 +12,9 @@
             <x-adminlte-select2 name="group_id">
                 <option selected disabled></option>
                 @foreach ($groups as $group)
-                    <option value="{{ $group->id }}">{{ $group->name }}</option>
+                    <option @if (old('group_id') == $group->id) selected @endif value="{{ $group->id }}">
+                        {{ $group->name }}
+                    </option>
                 @endforeach
             </x-adminlte-select2>
 
@@ -19,7 +22,9 @@
             <x-adminlte-select2 name="subject_id">
                 <option selected disabled></option>
                 @foreach ($subjects as $subject)
-                    <option value="{{ $subject->id }}">{{ $subject->full_name }}</option>
+                    <option @if (old('subject_id') == $subject->id) selected @endif value="{{ $subject->id }}">
+                        {{ $subject->full_name }}
+                    </option>
                 @endforeach
             </x-adminlte-select2>
 
@@ -27,22 +32,25 @@
             <x-adminlte-select2 name="teacher_id">
                 <option selected disabled></option>
                 @foreach ($teachers as $teacher)
-                    <option value="{{ $teacher->id }}">{{ $teacher->full_name }}</option>
+                    <option @if (old('teacher_id') == $teacher->id) selected @endif value="{{ $teacher->id }}">
+                        {{ $teacher->full_name }}
+                    </option>
                 @endforeach
             </x-adminlte-select2>
 
             <label>{{ trans('admin.schedule_create_building_input') }}</label>
-            <x-adminlte-input type="text" name="building" />
+            <x-adminlte-input type="text" name="building" value="{{ old('building') }}" />
 
             <label>{{ trans('admin.schedule_create_auditory_input') }}</label>
-            <x-adminlte-input type="number" name="auditory" />
+            <x-adminlte-input type="number" name="auditory" value="{{ old('auditory') }}" />
 
             <label>{{ trans('admin.schedule_create_subject_type_input') }}</label>
             <x-adminlte-select2 name="subject_type_id" id="typeSelect">
                 <option selected disabled></option>
                 @foreach ($types as $type)
                     <option @if ($type->exam) href="#exam" @else href="#subject" @endif
-                        value="{{ $type->id }}">{{ $type->full_name }}</option>
+                        @if (old('subject_type_id') == $type->id) selected @endif value="{{ $type->id }}">
+                        {{ $type->full_name }}</option>
                 @endforeach
             </x-adminlte-select2>
 
@@ -63,7 +71,7 @@
 
 @section('js')
     <script>
-        let long = 0;
+        let long = {{ old('long') == 1 ? 1 : 0 }};
 
         $('#longCheckbox').change(function() {
             if (this.checked) {
@@ -73,6 +81,8 @@
             if (!this.checked) {
                 long = 0;
             }
+
+            $('#timeStartSelect').trigger('change');
         });
 
         $('#typeSelect').on('change', function() {
@@ -107,6 +117,13 @@
 
         $('input[name="date_end"]').on('cancel.daterangepicker', function(ev, picker) {
             $(this).val('');
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            $('#typeSelect').trigger('change');
+            $('input[name="date_start"]').val('{{ old('date_start') }}');
+            $('input[name="date_end"]').val('{{ old('date_end') }}');
+            $('input[name="date"]').val('{{ old('date') }}');
         });
     </script>
 @stop

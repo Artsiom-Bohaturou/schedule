@@ -15,6 +15,11 @@
             'opens' => 'right',
             'drops' => 'up',
         ];
+        
+        if (old('date') != null) {
+            $config['startDate'] = old('date');
+        }
+        
     @endphp
 
     <x-adminlte-date-range name="date" label=" {{ trans('admin.schedule_create_exam_date_input') }}" igroup-size="lg"

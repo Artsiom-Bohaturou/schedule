@@ -3,8 +3,13 @@
 @section('content')
 
     <div class="d-flex justify-content-between pt-4 pb-2">
-        <x-adminlte-button icon="fa fa-lg fa-fw fa-upload" data-toggle="modal" data-target="#modalImport" class="bg-primary"
-            label="{{ trans('admin.schedule_import') }}" />
+        <div>
+            <x-adminlte-button icon="fa fa-lg fa-fw fa-upload" data-toggle="modal" data-target="#modalImport"
+                class="bg-primary mr-2" label="{{ trans('admin.schedule_import') }}" />
+
+            <x-adminlte-button icon="fa fa-lg fa-fw fa-trash" data-toggle="modal" data-target="#modalDeleteEnded"
+                class="bg-danger" label="{{ trans('admin.schedule_delete_ended') }}" />
+        </div>
         <a href="{{ route('schedule.create') }}">
             <x-adminlte-button id="createButton" icon="fa fa-lg fa-fw fa-plus" class="bg-success"
                 label="{{ trans('admin.create') }}" />
@@ -140,6 +145,7 @@
         <x-adminlte-modal id="modalImport" title="{{ trans('admin.schedule_import_title') }}" theme="primary"
             icon="fas fa-upload" size='lg'>
             @csrf
+            <a href="{{ asset('example.xlsx') }}" class="download">{{ trans('admin.schedule_file_example') }}</a>
 
             <x-adminlte-input style="height:90%;" type="file" name="file"
                 label="{{ trans('admin.schedule_import_label') }}" />
@@ -149,6 +155,26 @@
                 <button id="importSubmit" class="btn btn-primary" type="submit" data-toggle="modal"
                     data-target="#modalLoader">
                     {{ trans('admin.schedule_import_submit') }}
+                </button>
+                <x-adminlte-button id="importHide" theme="secondary" label="{{ trans('admin.cancel') }}"
+                    data-dismiss="modal" />
+            </x-slot>
+        </x-adminlte-modal>
+    </form>
+
+    {{-- DELETE ENDED FORM --}}
+    <form method="POST" action="{{ route('schedule.deleteEnded') }}">
+        <x-adminlte-modal id="modalDeleteEnded" title="{{ trans('admin.schedule_delete_title') }}" theme="danger"
+            icon="fas fa-upload" size='lg'>
+            @csrf
+            @method('DELETE')
+
+            {{ trans('admin.schedule_delete_message') }}
+
+            <x-slot name="footerSlot">
+                <div class="mr-auto"></div>
+                <button id="importSubmit" class="btn btn-danger" type="submit" data-toggle="modal">
+                    {{ trans('admin.delete') }}
                 </button>
                 <x-adminlte-button id="importHide" theme="secondary" label="{{ trans('admin.cancel') }}"
                     data-dismiss="modal" />
@@ -177,7 +203,8 @@
     @endif
 
     @if (session('success'))
-        <x-adminlte-alert class="bg-success fixed-bottom w-25 mx-auto" icon="fa fa-lg fa-check" dismissable />
+        <x-adminlte-alert class="bg-success fixed-bottom w-25 mx-auto" icon="fa fa-lg fa-check" dismissable
+            title="{{ trans('admin.success_message') }}" />
     @endif
 
 @stop
@@ -212,6 +239,12 @@
             width: 100%;
             background-color: #212529 !important;
             color: white;
+        }
+
+        .download {
+            cursor: pointer;
+            text-decoration: underline;
+            font-weight: 700;
         }
     </style>
 @stop

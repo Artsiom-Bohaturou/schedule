@@ -62,7 +62,7 @@ class ScheduleController extends BaseController
 
         Schedule::insert($schedule);
 
-        return redirect()->route('schedule.index');
+        return redirect()->route('schedule.index')->with('success', true);
     }
 
     public function update(ScheduleUpdateRequest $request, $id)
@@ -72,7 +72,7 @@ class ScheduleController extends BaseController
         if (array_key_exists('date', $data)) {
             Schedule::findOrFail($id)->update($data);
 
-            return redirect()->route('schedule.index');
+            return redirect()->route('schedule.index')->with('success', true);
         }
 
         $schedule = Schedule::whereIn('id', $data['ids'])->get();
@@ -175,5 +175,12 @@ class ScheduleController extends BaseController
 
             return redirect()->route('schedule.index')->withErrors(['error' => $e->getMessage()]);
         }
+    }
+
+    public function deleteEnded()
+    {
+        Schedule::where('date_end', '<', now())->delete();
+
+        return redirect()->route('schedule.index')->with('success', true);
     }
 }
