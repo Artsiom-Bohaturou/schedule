@@ -39,7 +39,10 @@
 
             </a>
         </div>
-
+        <div style="border: solid 2px red;border-radius: 2px;padding:3px;">data for demo:
+            login: admin
+            password: 12345678
+        </div>
         {{-- Card Box --}}
         <div class="card {{ config('adminlte.classes_auth_card', 'card-outline card-primary') }}">
 
